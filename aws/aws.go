@@ -7,7 +7,7 @@ const (
 )
 
 type AWS interface {
-	GetTargets(cname, sname string) ([]string, error)
+	GetTargets(cname, name string) ([]string, error)
 }
 
 func New(t string) AWS {

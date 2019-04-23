@@ -1,8 +1,11 @@
 package main
 
 import (
+	"log"
 	"os"
 	"time"
+
+	"github.com/FenixAra/prom-discovery/aws"
 )
 
 var (
@@ -13,10 +16,25 @@ var (
 func main() {
 	for {
 		updatePromTargets()
-		time.Sleep(1 * time.Second)
+		time.Sleep(15 * time.Second)
 	}
 }
 
 func updatePromTargets() {
 	ReadConfig(configFile)
+
+	for _, target := range conf.Targets {
+		switch target.Provider {
+		case ProviderAWS:
+			awsProvider := aws.New(target.Type)
+			targets, err := awsProvider.GetTargets(target.Cluster, target.Name)
+			if err != nil {
+				continue
+			}
+
+			log.Println(targets)
+		default:
+			continue
+		}
+	}
 }

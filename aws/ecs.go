@@ -25,10 +25,10 @@ func newECS() *ECS {
 	}
 }
 
-func (e *ECS) GetTargets(cname, sname string) ([]string, error) {
+func (e *ECS) GetTargets(cname, name string) ([]string, error) {
 	out, err := e.ecs.DescribeServices(&ecs.DescribeServicesInput{
 		Cluster:  aws.String(cname),
-		Services: []*string{aws.String(sname)},
+		Services: []*string{aws.String(name)},
 	})
 	if err != nil {
 		log.Println("Unable to describe services. Err: ", err)
