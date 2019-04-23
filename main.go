@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 	"time"
 
@@ -22,19 +21,26 @@ func main() {
 
 func updatePromTargets() {
 	ReadConfig(configFile)
-
-	for _, target := range conf.Targets {
-		switch target.Provider {
+	var targets []target
+	for _, tg := range conf.Targets {
+		switch tg.Provider {
 		case ProviderAWS:
-			awsProvider := aws.New(target.Type)
-			targets, err := awsProvider.GetTargets(target.Cluster, target.Name)
+			awsProvider := aws.New(tg.Type)
+			t, err := awsProvider.GetTargets(tg.Cluster, tg.Name)
 			if err != nil {
 				continue
 			}
 
-			log.Println(targets)
+			labels := make(map[string]string)
+			labels["job"] = tg.Name
+			targets = append(targets, target{
+				Targets: t,
+				Labels:  labels,
+			})
 		default:
 			continue
 		}
 	}
+
+	writeToTargetFile(targets)
 }
