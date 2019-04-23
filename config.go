@@ -6,6 +6,10 @@ import (
 	"log"
 )
 
+const (
+	ProviderAWS = "aws"
+)
+
 type Config struct {
 	Targets []Target `json:"targets"`
 }

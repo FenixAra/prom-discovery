@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 	"time"
 )
@@ -20,6 +19,4 @@ func main() {
 
 func updatePromTargets() {
 	ReadConfig(configFile)
-
-	log.Println(conf)
 }
