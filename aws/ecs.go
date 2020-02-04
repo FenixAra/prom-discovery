@@ -25,7 +25,7 @@ func newECS() *ECS {
 	}
 }
 
-func (e *ECS) GetTargets(cname, name string) ([]string, error) {
+func (e *ECS) GetTargets(cname, name string, privateIP bool) ([]string, error) {
 	out, err := e.ecs.DescribeServices(&ecs.DescribeServicesInput{
 		Cluster:  aws.String(cname),
 		Services: []*string{aws.String(name)},
@@ -55,7 +55,11 @@ func (e *ECS) GetTargets(cname, name string) ([]string, error) {
 			}
 
 			if len(instance.Reservations) > 0 && len(instance.Reservations[0].Instances) > 0 {
-				targets = append(targets, *instance.Reservations[0].Instances[0].PublicIpAddress+":"+strconv.Itoa(int(*target.Target.Port)))
+				if privateIP {
+					targets = append(targets, *instance.Reservations[0].Instances[0].PrivateIpAddress+":"+strconv.Itoa(int(*target.Target.Port)))
+				} else {
+					targets = append(targets, *instance.Reservations[0].Instances[0].PublicIpAddress+":"+strconv.Itoa(int(*target.Target.Port)))
+				}
 			}
 		}
 	}

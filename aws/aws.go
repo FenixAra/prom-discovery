@@ -7,7 +7,7 @@ const (
 )
 
 type AWS interface {
-	GetTargets(cname, name string) ([]string, error)
+	GetTargets(cname, name string, privateIP bool) ([]string, error)
 }
 
 func New(t string) AWS {
