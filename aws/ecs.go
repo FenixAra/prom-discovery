@@ -55,11 +55,12 @@ func (e *ECS) GetTargets(cname, name string, isPrivate bool) ([]string, error) {
 			}
 
 			if len(instance.Reservations) > 0 && len(instance.Reservations[0].Instances) > 0 {
+				tg := *instance.Reservations[0].Instances[0].PublicIpAddress + ":" + strconv.Itoa(int(*target.Target.Port))
 				if isPrivate {
-					targets = append(targets, *instance.Reservations[0].Instances[0].PrivateIpAddress+":"+strconv.Itoa(int(*target.Target.Port)))
-				} else {
-					targets = append(targets, *instance.Reservations[0].Instances[0].PublicIpAddress+":"+strconv.Itoa(int(*target.Target.Port)))
+					tg = *instance.Reservations[0].Instances[0].PrivateIpAddress + ":" + strconv.Itoa(int(*target.Target.Port))
 				}
+
+				targets = append(targets, tg)
 			}
 		}
 	}
