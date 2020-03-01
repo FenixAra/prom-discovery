@@ -2,7 +2,6 @@ package main
 
 import (
 	"os"
-	"strings"
 	"time"
 
 	"github.com/FenixAra/prom-discovery/aws"
@@ -11,7 +10,6 @@ import (
 var (
 	configFile = os.Getenv("CONFIG_FILE")
 	targetFile = os.Getenv("TARGET_FILE")
-	targetIP   = os.Getenv("TARGET_IP")
 )
 
 func main() {
@@ -30,11 +28,8 @@ func updatePromTargets() {
 			awsProvider := aws.New(tg.Type)
 			var t []string
 			var err error
-			if targetIP == strings.ToLower("private") {
-				t, err = awsProvider.GetTargets(tg.Cluster, tg.Name, true)
-			} else {
-				t, err = awsProvider.GetTargets(tg.Cluster, tg.Name, false)
-			}
+
+			t, err = awsProvider.GetTargets(tg.Cluster, tg.Name, tg.IsPrivate)
 			if err != nil {
 				continue
 			}

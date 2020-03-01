@@ -15,11 +15,12 @@ type Config struct {
 }
 
 type Target struct {
-	Name     string `json:"name"`
-	Cluster  string `json:"cluster"`
-	Type     string `json:"type"`
-	Provider string `json:"provider"`
-	Port     string `json:"port"`
+	Name      string `json:"name"`
+	Cluster   string `json:"cluster"`
+	Type      string `json:"type"`
+	Provider  string `json:"provider"`
+	Port      string `json:"port"`
+	IsPrivate bool   `json:"is_private"`
 }
 
 var conf *Config
